@@ -14,5 +14,5 @@ resource "azuread_group_member" "add_user" {
 }
 
 output "aksclusteradmingroup" {
-  value = azuread_group.aksclusteradmin.object_id
+  value = azuread_group.aks_cluster_admin_group.object_id
 }

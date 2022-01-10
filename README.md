@@ -4,37 +4,37 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 |                                         | Complete
 |-----------------------------------------|-------
-| Egress restriction using Azure Firewall | [ ]
-| Ingress Controller                      | [ ]
-| Azure Active Directory Pod Identity     | [ ]
-| Resource Limits                         | [ ]
-| Other Infrastructure aspects            | [ ]
-| Zero Trust Network Policies             | [ ]
-| Horizontal Pod Autoscaling              | [ ]
-| Cluster Autoscaling                     | [ ]
-| Readiness/Liveness Probes               | [ ]
-| Helm charts                             | [ ]
-| Distributed Monitoring                  | [ ]
+| Egress restriction using Azure Firewall |
+| Ingress Controller                      |
+| Azure Active Directory Pod Identity     |
+| Resource Limits                         |
+| Other Infrastructure aspects            |
+| Zero Trust Network Policies             |
+| Horizontal Pod Autoscaling              |
+| Cluster Autoscaling                     |
+| Readiness/Liveness Probes               |
+| Helm charts                             |
+| Distributed Monitoring                  |
 
 ## Customizations
 
 |                          | Complete
 |--------------------------|-------
-| Terraform                | [ ]
-| Cert-Manager             | [ ]
-| Istio Ingress Controller | [ ]
-| ArgoCD                   | [ ]
-| Sealed Secrets           | [ ]
-| Prometheus               | [ ]
+| Terraform                |
+| Cert-Manager             |
+| Istio Ingress Controller |
+| ArgoCD                   |
+| Sealed Secrets           |
+| Prometheus               |
 
 ## Other TODO
 
 |                               | Complete
 |-------------------------------|-------
-| Canary Deploy                 | [ ]
-| Git Actions Application Build | [ ]
-| Test integration (API, E2E)   | [ ]
-| Local Development Setup       | [ ]
+| Canary Deploy                 |
+| Git Actions Application Build |
+| Test integration (API, E2E)   |
+| Local Development Setup       |
 
 ![Architecture](https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/imgs/aks-securebaseline-fabrikamdronedelivery.png)
 
@@ -43,6 +43,12 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 - [x] Followed <https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/01-prerequisites.md> for prerequisites
 - [ ] TLS Cert prep will go with self-signed but once the cluster is setup with move over to [Let's Encrypt hosted](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-letsencrypt-certificate-application-gateway)
 - [ ] Azure AD integration prep <https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/03-aad.md> Creating group and add users to it via Terraform. Creation of SP via az cli.
+
+Move to managed identities https://docs.microsoft.com/en-us/azure/aks/use-managed-identity
+
+NOT EDITED: https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/cluster-baseline-settings/user-facing-cluster-role-aad-group.yaml
+
+- [ ] Networking. Terraform example https://docs.microsoft.com/en-us/azure/developer/terraform/hub-spoke-hub-network converting ARM https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/networking/spoke-shipping-dronedelivery.json
 
 ## References
 
