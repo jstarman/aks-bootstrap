@@ -60,3 +60,5 @@ NOT EDITED: https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/cluste
 - [Hashicorp's Setup](https://github.com/hashicorp/learn-terraform-provision-aks-cluster)
 - [GitHub Action AKS deploy](https://docs.microsoft.com/en-us/azure/aks/kubernetes-action)
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
+- [AKS with Firewall](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/aks-firewall/aks-firewall)
+- [V Terraform Setup](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops)
