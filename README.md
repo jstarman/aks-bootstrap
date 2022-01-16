@@ -1,6 +1,8 @@
 # AKS Terraform Setup
 
-Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline) and more complete example [here](https://github.com/mspnp/aks-fabrikam-dronedelivery) with a Terraform infrastructure install and Helm chart configuration.
+An attempt at fast flow gitops style platform software development.
+
+Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline) and more complete example [here](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops) with a Terraform infrastructure install and Helm chart configuration.
 
 |                                         | Complete
 |-----------------------------------------|-------
@@ -36,23 +38,19 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 | Test integration (API, E2E)   |
 | Local Development Setup       |
 
-![Architecture](https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/imgs/aks-securebaseline-fabrikamdronedelivery.png)
+![Architecture](https://github.com/jstarman/private-aks-cluster-terraform-devops/blob/main/images/normalized-architecture.png)
 
 ## Steps
 
-- [x] Followed <https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/01-prerequisites.md> for prerequisites
-- [ ] TLS Cert prep will go with self-signed but once the cluster is setup with move over to [Let's Encrypt hosted](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-letsencrypt-certificate-application-gateway)
-- [ ] Azure AD integration prep <https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/03-aad.md> Creating group and add users to it via Terraform. Creation of SP via az cli.
-
-Move to managed identities https://docs.microsoft.com/en-us/azure/aks/use-managed-identity
-
-NOT EDITED: https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/cluster-baseline-settings/user-facing-cluster-role-aad-group.yaml
-
-- [ ] Networking. Terraform example https://docs.microsoft.com/en-us/azure/developer/terraform/hub-spoke-hub-network converting ARM https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/networking/spoke-shipping-dronedelivery.json
+- [x] Porting over terraform for platform setup
+- [ ] WAF and Application Gateway
 
 ## References
 
+- [Primary resource for Terraform Setup](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops)
+- [Primary resource docs](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/aks-firewall/aks-firewall)
 - [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
+- [More detailed Baseline setup](https://github.com/mspnp/aks-fabrikam-dronedelivery)
 - [I Terraform Setup](https://github.com/mofaizal/rampup-project)
 - [II Terraform Setup](https://github.com/pliniogsnascimento/aks-gitops-lab)
 - [III Terraform Setup](https://github.com/J0hn-B/eshop-aks)
@@ -60,5 +58,4 @@ NOT EDITED: https://github.com/mspnp/aks-fabrikam-dronedelivery/blob/main/cluste
 - [Hashicorp's Setup](https://github.com/hashicorp/learn-terraform-provision-aks-cluster)
 - [GitHub Action AKS deploy](https://docs.microsoft.com/en-us/azure/aks/kubernetes-action)
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
-- [AKS with Firewall](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/aks-firewall/aks-firewall)
-- [V Terraform Setup](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops)
+- [AKS for microservices](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
