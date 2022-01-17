@@ -43,6 +43,10 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 ## Steps
 
 - [x] Porting over terraform for platform setup
+- [x] Fill variables
+  - Determine aks supported version `az aks get-versions -l westus2`
+  - Create public key for ssh
+  - Determine aks VM size
 - [ ] WAF and Application Gateway
 
 ## References
@@ -59,3 +63,4 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 - [GitHub Action AKS deploy](https://docs.microsoft.com/en-us/azure/aks/kubernetes-action)
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
 - [AKS for microservices](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
+- [Terraform Examples](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples/kubernetes)
