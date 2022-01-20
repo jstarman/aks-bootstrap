@@ -30,5 +30,4 @@ override.tf.json
 
 .terraform.lock.hcl
 .env
-delete.ps1
 id_rsa.pub

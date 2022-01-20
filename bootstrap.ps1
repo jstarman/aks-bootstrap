@@ -39,6 +39,3 @@ terraform init -input=false -backend=true -reconfigure -upgrade `
   -backend-config="resource_group_name=$env:TF_VAR_infra_resource_group" `
   -backend-config="storage_account_name=$env:TF_VAR_infra_storage_account" `
   -backend-config="container_name=$env:TF_VAR_storage_container"
-
-terraform import azurerm_resource_group.infra_state_rg "/subscriptions/$subscriptionId/resourceGroups/$env:TF_VAR_infra_resource_group"
-terraform import azurerm_storage_account.state_storage "/subscriptions/$subscriptionId/resourceGroups/$env:TF_VAR_infra_resource_group/providers/Microsoft.Storage/storageAccounts/$env:TF_VAR_infra_storage_account"

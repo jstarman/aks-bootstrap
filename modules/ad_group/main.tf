@@ -1,5 +1,16 @@
 # Create AKS Cluster Admin Group and add SP to the group
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">=2.91.0"
+    }
+  }
+
+  required_version = ">= 0.14.9"
+}
+
 # data "azuread_user" "aks_cluster_admin_sp" {
 #   user_principal_name = var.cluster_admin_username
 # }

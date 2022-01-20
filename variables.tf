@@ -4,16 +4,6 @@ variable "location" {
   default     = "westus2"
 }
 
-variable "infra_resource_group" {
-  description = "Shared management resource group"
-  type        = string
-}
-
-variable "infra_storage_account" {
-  description = "Storage to store the state file"
-  type        = string
-}
-
 variable "cluster_admin_username" {
   description = "AKS Cluster Admin Service Principal"
   type        = string
@@ -229,7 +219,7 @@ variable "default_node_pool_name" {
 variable "default_node_pool_vm_size" {
   description = "Specifies the vm size of the default node pool"
   type        = string
-  default     = "Standard_DS2_v2"
+  default     = "Standard_A2_v2"
 }
 
 variable "default_node_pool_availability_zones" {
