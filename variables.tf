@@ -328,3 +328,99 @@ variable "ssh_public_key_path" {
   description = "(Required) Specifies the SSH public key path for the jumpbox virtual machine and AKS worker nodes."
   type        = string
 }
+
+variable "storage_account_kind" {
+  description = "(Optional) Specifies the account kind of the storage account"
+  type        = string
+  default     = "StorageV2"
+
+   validation {
+    condition = contains(["Storage", "StorageV2"], var.storage_account_kind)
+    error_message = "The account kind of the storage account is invalid."
+  }
+}
+
+variable "storage_account_tier" {
+  description = "(Optional) Specifies the account tier of the storage account"
+  type        = string
+  default     = "Standard"
+
+   validation {
+    condition = contains(["Standard", "Premium"], var.storage_account_tier)
+    error_message = "The account tier of the storage account is invalid."
+  }
+}
+
+variable "storage_account_replication_type" {
+  description = "(Optional) Specifies the replication type of the storage account"
+  type        = string
+  default     = "LRS"
+
+  validation {
+    condition = contains(["LRS", "ZRS", "GRS", "GZRS", "RA-GRS", "RA-GZRS"], var.storage_account_replication_type)
+    error_message = "The replication type of the storage account is invalid."
+  }
+}
+
+variable "bastion_host_name" {
+  description = "(Optional) Specifies the name of the bastion host"
+  type        = string
+  default     = "AksBastionHost"
+}
+
+variable "vm_name" {
+  description = "Specifies the name of the jumpbox virtual machine"
+  type        = string
+  default     = "JumpBoxVm"
+}
+
+variable "vm_size" {
+  description = "Specifies the size of the jumpbox virtual machine"
+  default     = "Standard_DS1_v2"
+  type        = string
+}
+
+variable "vm_public_ip" {
+  description = "(Optional) Specifies whether create a public IP for the virtual machine"
+  type = bool
+  default = false
+}
+
+variable "admin_username" {
+  description = "(Required) Specifies the admin username of the jumpbox virtual machine and AKS worker nodes."
+  type        = string
+  default     = "azadmin"
+}
+
+variable "vm_os_disk_image" {
+  description = "Specifies the os disk image of the virtual machine"
+  type        = map(string)
+  default     = {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+}
+
+variable "domain_name_label" {
+  description = "Specifies the domain name for the jumbox virtual machine"
+  default     = "aksjumpboxvm"
+  type        = string
+}
+
+variable "vm_os_disk_storage_account_type" {
+  description = "Specifies the storage account type of the os disk of the jumpbox virtual machine"
+  type        = string
+  default     = "Standard_LRS"
+
+  validation {
+    condition = contains(["Premium_LRS", "Premium_ZRS", "StandardSSD_LRS", "StandardSSD_ZRS",  "Standard_LRS"], var.vm_os_disk_storage_account_type)
+    error_message = "The storage account type of the OS disk is invalid."
+  }
+}
+
+variable "script_storage_account_name" {
+  description = "(Required) Specifies the name of the storage account that contains the custom script."
+  type        = string
+}
