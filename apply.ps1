@@ -24,8 +24,8 @@ terraform init -input=false -backend=true -reconfigure -upgrade `
   -backend-config="storage_account_name=$env:TF_VAR_infra_storage_account" `
   -backend-config="container_name=$env:TF_VAR_storage_container"
 
-Write-Output "Terraform plan"
-terraform plan
+# Write-Output "Terraform plan"
+# terraform plan
 
 Write-Output "Terraform apply"
 terraform apply -auto-approve

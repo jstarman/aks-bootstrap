@@ -144,6 +144,7 @@ module "routetable" {
   }
 }
 
+# Basic $0.167 and Standard $0.667(do not support private endpoints) Premium $1.667/day
 module "container_registry" {
   source                       = "./modules/container_registry"
   name                         = var.acr_name
@@ -212,6 +213,33 @@ resource "azurerm_role_assignment" "network_contributor" {
   skip_service_principal_aad_check = true
 }
 
+module "node_pool" {
+  source = "./modules/node_pool"
+  resource_group_name = azurerm_resource_group.aks_platform_rg.name
+  kubernetes_cluster_id = module.aks_cluster.id
+  name                         = var.additional_node_pool_name
+  vm_size                      = var.additional_node_pool_vm_size
+  mode                         = var.additional_node_pool_mode
+  node_labels                  = var.additional_node_pool_node_labels
+  node_taints                  = var.additional_node_pool_node_taints
+  availability_zones           = var.additional_node_pool_availability_zones
+  vnet_subnet_id               = module.aks_network.subnet_ids[var.additional_node_pool_subnet_name]
+  enable_auto_scaling          = var.additional_node_pool_enable_auto_scaling
+  enable_host_encryption       = var.additional_node_pool_enable_host_encryption
+  enable_node_public_ip        = var.additional_node_pool_enable_node_public_ip
+  orchestrator_version         = var.kubernetes_version
+  max_pods                     = var.additional_node_pool_max_pods
+  max_count                    = var.additional_node_pool_max_count
+  min_count                    = var.additional_node_pool_min_count
+  node_count                   = var.additional_node_pool_node_count
+  os_type                      = var.additional_node_pool_os_type
+  os_disk_type                 = var.additional_node_pool_os_disk_type
+  priority                     = var.additional_node_pool_priority
+  tags                         = var.tags
+
+  depends_on                   = [module.routetable]
+}
+
 resource "azurerm_role_assignment" "acr_pull" {
   role_definition_name = "AcrPull"
   scope                = module.container_registry.id
@@ -251,26 +279,87 @@ module "bastion_host" {
 
 # Standard_DS1_v2 $41.61/month
 # Jump box
-# module "virtual_machine" {
-#   source                              = "./modules/virtual_machine"
-#   name                                = var.vm_name
-#   size                                = var.vm_size
-#   location                            = var.location
-#   public_ip                           = var.vm_public_ip
-#   vm_user                             = var.admin_username
-#   admin_ssh_public_key                = file(var.ssh_public_key_path)
-#   os_disk_image                       = var.vm_os_disk_image
-#   domain_name_label                   = var.domain_name_label
-#   resource_group_name                 = azurerm_resource_group.aks_platform_rg.name
-#   subnet_id                           = module.aks_network.subnet_ids[var.vm_subnet_name]
-#   os_disk_storage_account_type        = var.vm_os_disk_storage_account_type
-#   boot_diagnostics_storage_account    = module.storage_account.primary_blob_endpoint
-#   log_analytics_workspace_id          = module.log_analytics_workspace.workspace_id
-#   log_analytics_workspace_key         = module.log_analytics_workspace.primary_shared_key
-#   log_analytics_workspace_resource_id = module.log_analytics_workspace.id
-#   log_analytics_retention_days        = var.log_analytics_retention_days
-#   script_storage_account_name         = var.script_storage_account_name
-#   script_storage_account_key          = var.script_storage_account_key
-#   container_name                      = var.container_name
-#   script_name                         = var.script_name
-# }
+module "virtual_machine" {
+  source                              = "./modules/virtual_machine"
+  name                                = var.vm_name
+  size                                = var.vm_size
+  location                            = var.location
+  public_ip                           = var.vm_public_ip
+  vm_user                             = var.admin_username
+  admin_ssh_public_key                = file(var.ssh_public_key_path)
+  os_disk_image                       = var.vm_os_disk_image
+  domain_name_label                   = var.domain_name_label
+  resource_group_name                 = azurerm_resource_group.aks_platform_rg.name
+  subnet_id                           = module.aks_network.subnet_ids[var.vm_subnet_name]
+  os_disk_storage_account_type        = var.vm_os_disk_storage_account_type
+  boot_diagnostics_storage_account    = module.storage_account.primary_blob_endpoint
+  log_analytics_workspace_id          = module.log_analytics_workspace.workspace_id
+  log_analytics_workspace_key         = module.log_analytics_workspace.primary_shared_key
+  log_analytics_workspace_resource_id = module.log_analytics_workspace.id
+  log_analytics_retention_days        = var.log_analytics_retention_days
+  # vars that download and run start up script to update and install on vm - holding off to research better process
+  # script_storage_account_name         = var.script_storage_account_name
+  # script_storage_account_key          = var.script_storage_account_key
+  # container_name                      = var.container_name
+  # script_name                         = var.script_name
+}
+
+module "acr_private_dns_zone" {
+  source                       = "./modules/private_dns_zone"
+  name                         = "privatelink.azurecr.io"
+  resource_group_name          = azurerm_resource_group.aks_platform_rg.name
+  virtual_networks_to_link     = {
+    (module.hub_network.name) = {
+      subscription_id = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.aks_platform_rg.name
+    }
+    (module.aks_network.name) = {
+      subscription_id = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.aks_platform_rg.name
+    }
+  }
+}
+
+module "blob_private_dns_zone" {
+  source                       = "./modules/private_dns_zone"
+  name                         = "privatelink.blob.core.windows.net"
+  resource_group_name          = azurerm_resource_group.aks_platform_rg.name
+  virtual_networks_to_link     = {
+    (module.hub_network.name) = {
+      subscription_id = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.aks_platform_rg.name
+    }
+    (module.aks_network.name) = {
+      subscription_id = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.aks_platform_rg.name
+    }
+  }
+}
+
+module "acr_private_endpoint" {
+  source                         = "./modules/private_endpoint"
+  name                           = "${module.container_registry.name}PrivateEndpoint"
+  location                       = var.location
+  resource_group_name            = azurerm_resource_group.aks_platform_rg.name
+  subnet_id                      = module.aks_network.subnet_ids[var.vm_subnet_name]
+  tags                           = var.tags
+  private_connection_resource_id = module.container_registry.id
+  is_manual_connection           = false
+  subresource_name               = "registry"
+  private_dns_zone_group_name    = "AcrPrivateDnsZoneGroup"
+  private_dns_zone_group_ids     = [module.acr_private_dns_zone.id]
+}
+
+module "blob_private_endpoint" {
+  source                         = "./modules/private_endpoint"
+  name                           = "${title(module.storage_account.name)}PrivateEndpoint"
+  location                       = var.location
+  resource_group_name            = azurerm_resource_group.aks_platform_rg.name
+  subnet_id                      = module.aks_network.subnet_ids[var.vm_subnet_name]
+  tags                           = var.tags
+  private_connection_resource_id = module.storage_account.id
+  is_manual_connection           = false
+  subresource_name               = "blob"
+  private_dns_zone_group_name    = "BlobPrivateDnsZoneGroup"
+  private_dns_zone_group_ids     = [module.blob_private_dns_zone.id]
+}

@@ -46,15 +46,13 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 - [x] Fill variables
   - Determine aks supported version `az aks get-versions -l westus2`
   - Create public key for ssh
-  - Determine aks VM size
+  - Determine aks VM size, disc type see default and addtional node vars
 - [x] Deploy platform `./apply.ps1`
-  - Firewall takes 6m25s up and down
-  - AKS takes 9m12s up and down
-  - Bastion takes 
+  - apply takes about 30m
 - [x] Tear down platform `./destroy.ps1`
-  If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> Resource -> Diagnostic Settings -> Delete setting. Then Destroy and re-apply.
-- [x] Porting over terraform for platform setup
-
+  - destroy takes about 18m
+  - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> Resource -> Diagnostic Settings -> Delete setting. Then Destroy and re-apply.
+- [ ] Verify setup
 - [ ] WAF and Application Gateway
 
 ## Cleanup
