@@ -76,3 +76,10 @@ Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for c
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
 - [AKS for microservices](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
 - [Terraform Examples](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples/kubernetes)
+
+### Networking
+
+- [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
+- [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator)
+- [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
+
