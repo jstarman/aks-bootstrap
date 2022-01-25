@@ -109,40 +109,42 @@ module "vnet_peering" {
 }
 
 # $1.25 per deployment hour plus $0.016 per GB processed
-module "firewall" {
-  source                       = "./modules/firewall"
-  name                         = var.firewall_name
-  resource_group_name          = azurerm_resource_group.aks_platform_rg.name
-  zones                        = var.firewall_zones
-  threat_intel_mode            = var.firewall_threat_intel_mode
-  location                     = var.location
-  sku_tier                     = var.firewall_sku_tier
-  pip_name                     = "${var.firewall_name}PublicIp"
-  subnet_id                    = module.hub_network.subnet_ids["AzureFirewallSubnet"]
-  log_analytics_workspace_id   = module.log_analytics_workspace.id
-  log_analytics_retention_days = var.log_analytics_retention_days
-}
+# module "firewall" {
+#   source                       = "./modules/firewall"
+#   name                         = var.firewall_name
+#   resource_group_name          = azurerm_resource_group.aks_platform_rg.name
+#   zones                        = var.firewall_zones
+#   threat_intel_mode            = var.firewall_threat_intel_mode
+#   location                     = var.location
+#   sku_tier                     = var.firewall_sku_tier
+#   pip_name                     = "${var.firewall_name}PublicIp"
+#   subnet_id                    = module.hub_network.subnet_ids["AzureFirewallSubnet"]
+#   log_analytics_workspace_id   = module.log_analytics_workspace.id
+#   log_analytics_retention_days = var.log_analytics_retention_days
+# }
 
-module "routetable" {
-  source               = "./modules/route_table"
-  resource_group_name  = azurerm_resource_group.aks_platform_rg.name
-  location             = var.location
-  route_table_name     = "DefaultRouteTable"
-  route_name           = "RouteToAzureFirewall"
-  firewall_private_ip  = module.firewall.private_ip_address
-  subnets_to_associate = {
-    (var.default_node_pool_subnet_name) = {
-      subscription_id      = data.azurerm_client_config.current.subscription_id
-      resource_group_name  = azurerm_resource_group.aks_platform_rg.name
-      virtual_network_name = module.aks_network.name
-    }
-    (var.additional_node_pool_subnet_name) = {
-      subscription_id      = data.azurerm_client_config.current.subscription_id
-      resource_group_name  = azurerm_resource_group.aks_platform_rg.name
-      virtual_network_name = module.aks_network.name
-    }
-  }
-}
+# module "egress_routetable" {
+#   source               = "./modules/route_table"
+#   resource_group_name  = azurerm_resource_group.aks_platform_rg.name
+#   location             = var.location
+#   route_table_name     = "EgressRouteTable"
+#   route_name           = "RouteToAzureFirewall"
+#   firewall_private_ip  = module.firewall.private_ip_address
+#   subnets_to_associate = {
+#     (var.default_node_pool_subnet_name) = {
+#       subscription_id      = data.azurerm_client_config.current.subscription_id
+#       resource_group_name  = azurerm_resource_group.aks_platform_rg.name
+#       virtual_network_name = module.aks_network.name
+#     }
+#     (var.additional_node_pool_subnet_name) = {
+#       subscription_id      = data.azurerm_client_config.current.subscription_id
+#       resource_group_name  = azurerm_resource_group.aks_platform_rg.name
+#       virtual_network_name = module.aks_network.name
+#     }
+#   }
+# }
+
+# Application Gateway WAF routetable
 
 # Basic $0.167 and Standard $0.667(do not support private endpoints) Premium $1.667/day
 module "container_registry" {
@@ -203,7 +205,7 @@ module "aks_cluster" {
   azure_rbac_enabled                       = var.azure_rbac_enabled
   admin_username                           = var.cluster_admin_username
   ssh_public_key                           = file(var.ssh_public_key_path)
-  depends_on                               = [module.routetable]
+  # depends_on                               = [module.egress_routetable]
 }
 
 resource "azurerm_role_assignment" "network_contributor" {
@@ -237,7 +239,7 @@ module "node_pool" {
   priority                     = var.additional_node_pool_priority
   tags                         = var.tags
 
-  depends_on                   = [module.routetable]
+  # depends_on                   = [module.egress_routetable]
 }
 
 resource "azurerm_role_assignment" "acr_pull" {

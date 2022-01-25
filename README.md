@@ -38,7 +38,9 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 | Test integration (API, E2E)   |
 | Local Development Setup       |
 
-![Architecture](https://github.com/jstarman/private-aks-cluster-terraform-devops/blob/main/images/normalized-architecture.png)
+![Architecture](./images/normalized-architecture.png)
+
+![API Gateway with WAF](./images/api-gateway.png)
 
 ## Steps
 

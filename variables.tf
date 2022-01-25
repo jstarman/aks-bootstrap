@@ -81,6 +81,18 @@ variable "aks_vnet_address_space" {
   default     =  ["10.0.0.0/16"]
 }
 
+variable "gateway_subnet_name" {
+  description = "Specifies the name of the subnet that hosts the default node pool"
+  type        = string
+  default     =  "SystemSubnet"
+}
+
+variable "gateway_subnet_address_prefix" {
+  description = "Specifies the address prefix of the subnet that hosts the default node pool"
+  type        = list(string)
+  default     =  ["10.0.64.0/24"]
+}
+
 variable "default_node_pool_subnet_name" {
   description = "Specifies the name of the subnet that hosts the default node pool"
   type        = string
@@ -90,7 +102,7 @@ variable "default_node_pool_subnet_name" {
 variable "default_node_pool_subnet_address_prefix" {
   description = "Specifies the address prefix of the subnet that hosts the default node pool"
   type        = list(string)
-  default     =  ["10.0.0.0/21"]
+  default     =  ["10.0.32.0/21"]
 }
 
 variable "additional_node_pool_subnet_name" {
@@ -102,7 +114,7 @@ variable "additional_node_pool_subnet_name" {
 variable "additional_node_pool_subnet_address_prefix" {
   description = "Specifies the address prefix of the subnet that hosts the additional node pool"
   type        = list(string)
-  default     = ["10.0.16.0/20"]
+  default     = ["10.0.0.0/20"]
 }
 
 variable "vm_subnet_name" {
@@ -114,8 +126,9 @@ variable "vm_subnet_name" {
 variable "vm_subnet_address_prefix" {
   description = "Specifies the address prefix of the jumbox subnet"
   type        = list(string)
-  default     = ["10.0.8.0/21"]
+  default     = ["10.0.48.0/21"]
 }
+
 variable "firewall_name" {
   description = "Specifies the name of the Azure Firewall"
   type        = string
