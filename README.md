@@ -54,8 +54,8 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 - [x] Tear down platform `./destroy.ps1`
   - destroy takes about 18m
   - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> Resource -> Diagnostic Settings -> Delete setting. Then Destroy and re-apply.
-- [ ] Verify setup
 - [ ] WAF and Application Gateway
+- [ ] Verify setup
 
 ## Cleanup
 
@@ -80,6 +80,6 @@ Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for c
 ### Networking
 
 - [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
-- [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator)
+- [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator) calculate subnet blocks with N desired IPs + 2 reserved
 - [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
 
