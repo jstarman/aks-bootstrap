@@ -39,50 +39,87 @@ module "log_analytics_workspace" {
   solution_plan_map                = var.solution_plan_map
 }
 
-resource "azurerm_virtual_network" "vnet" {
-  name                = var.aks_vnet_name
-  resource_group_name = azurerm_resource_group.aks_platform_rg.name
-  location            = var.location
-  address_space       = var.aks_vnet_address_space
-}
+# resource "azurerm_virtual_network" "vnet" {
+#   name                = var.aks_vnet_name
+#   resource_group_name = azurerm_resource_group.aks_platform_rg.name
+#   location            = var.location
+#   address_space       = var.aks_vnet_address_space
+# }
 
-resource "azurerm_monitor_diagnostic_setting" "settings" {
-  name                       = "DiagnosticsSettings"
-  target_resource_id         = azurerm_virtual_network.vnet.id
-  log_analytics_workspace_id = module.log_analytics_workspace.id
+# resource "azurerm_monitor_diagnostic_setting" "settings" {
+#   name                       = "DiagnosticsSettings"
+#   target_resource_id         = azurerm_virtual_network.vnet.id
+#   log_analytics_workspace_id = module.log_analytics_workspace.id
 
-  log {
-    category = "VMProtectionAlerts"
-    enabled  = true
+#   log {
+#     category = "VMProtectionAlerts"
+#     enabled  = true
 
-    retention_policy {
-      enabled = true
-      days    = var.log_analytics_retention_days
+#     retention_policy {
+#       enabled = true
+#       days    = var.log_analytics_retention_days
+#     }
+#   }
+
+#   metric {
+#     category = "AllMetrics"
+
+#     retention_policy {
+#       enabled = true
+#       days    = var.log_analytics_retention_days
+#     }
+#   }
+# }
+
+# resource "azurerm_subnet" "gateway_subnet" {
+#   name                 = var.gateway_subnet_name
+#   resource_group_name  = azurerm_resource_group.aks_platform_rg.name
+#   virtual_network_name = azurerm_virtual_network.vnet.name
+#   address_prefixes     = ["10.0.0.0/24"]
+# }
+
+# resource "azurerm_subnet" "backend" {
+#   name                 = "backend"
+#   resource_group_name  = azurerm_resource_group.aks_platform_rg.name
+#   virtual_network_name = azurerm_virtual_network.vnet.name
+#   address_prefixes     = ["10.0.1.0/24"]
+# }
+
+module "aks_network" {
+  source                       = "./modules/virtual_network"
+  resource_group_name          = azurerm_resource_group.aks_platform_rg.name
+  location                     = var.location
+  vnet_name                    = var.aks_vnet_name
+  address_space                = var.aks_vnet_address_space
+  log_analytics_workspace_id   = module.log_analytics_workspace.id
+  log_analytics_retention_days = var.log_analytics_retention_days
+
+  subnets = [
+    {
+      name : var.default_node_pool_subnet_name
+      address_prefixes : var.default_node_pool_subnet_address_prefix
+      enforce_private_link_endpoint_network_policies : true
+      enforce_private_link_service_network_policies : false
+    },
+    {
+      name : var.additional_node_pool_subnet_name
+      address_prefixes : var.additional_node_pool_subnet_address_prefix
+      enforce_private_link_endpoint_network_policies : true
+      enforce_private_link_service_network_policies : false
+    },
+    {
+      name : var.vm_subnet_name
+      address_prefixes : var.vm_subnet_address_prefix
+      enforce_private_link_endpoint_network_policies : true
+      enforce_private_link_service_network_policies : false
+    },
+    {
+      name : var.gateway_subnet_name
+      address_prefixes : var.gateway_subnet_address_prefix
+      enforce_private_link_endpoint_network_policies : true
+      enforce_private_link_service_network_policies : false
     }
-  }
-
-  metric {
-    category = "AllMetrics"
-
-    retention_policy {
-      enabled = true
-      days    = var.log_analytics_retention_days
-    }
-  }
-}
-
-resource "azurerm_subnet" "gateway_subnet" {
-  name                 = var.gateway_subnet_name
-  resource_group_name  = azurerm_resource_group.aks_platform_rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.0.0/24"]
-}
-
-resource "azurerm_subnet" "backend" {
-  name                 = "backend"
-  resource_group_name  = azurerm_resource_group.aks_platform_rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
+  ]
 }
 
 resource "azurerm_public_ip" "gateway_pip" {
@@ -116,7 +153,7 @@ resource "azurerm_application_gateway" "gateway" {
 
   gateway_ip_configuration {
     name      = "my-gateway-ip-configuration"
-    subnet_id = azurerm_subnet.gateway_subnet.id
+    subnet_id = module.aks_network.subnet_ids[var.gateway_subnet_name]
   }
 
   frontend_port {
@@ -178,43 +215,6 @@ resource "azurerm_application_gateway" "gateway" {
 #     {
 #       name : "AzureBastionSubnet"
 #       address_prefixes : var.hub_bastion_subnet_address_prefix
-#       enforce_private_link_endpoint_network_policies : true
-#       enforce_private_link_service_network_policies : false
-#     }
-#   ]
-# }
-
-# module "aks_network" {
-#   source                       = "./modules/virtual_network"
-#   resource_group_name          = azurerm_resource_group.aks_platform_rg.name
-#   location                     = var.location
-#   vnet_name                    = var.aks_vnet_name
-#   address_space                = var.aks_vnet_address_space
-#   log_analytics_workspace_id   = module.log_analytics_workspace.id
-#   log_analytics_retention_days = var.log_analytics_retention_days
-
-#   subnets = [
-#     {
-#       name : var.default_node_pool_subnet_name
-#       address_prefixes : var.default_node_pool_subnet_address_prefix
-#       enforce_private_link_endpoint_network_policies : true
-#       enforce_private_link_service_network_policies : false
-#     },
-#     {
-#       name : var.additional_node_pool_subnet_name
-#       address_prefixes : var.additional_node_pool_subnet_address_prefix
-#       enforce_private_link_endpoint_network_policies : true
-#       enforce_private_link_service_network_policies : false
-#     },
-#     {
-#       name : var.vm_subnet_name
-#       address_prefixes : var.vm_subnet_address_prefix
-#       enforce_private_link_endpoint_network_policies : true
-#       enforce_private_link_service_network_policies : false
-#     },
-#     {
-#       name : var.gateway_subnet_name
-#       address_prefixes : var.gateway_subnet_address_prefix
 #       enforce_private_link_endpoint_network_policies : true
 #       enforce_private_link_service_network_policies : false
 #     }
