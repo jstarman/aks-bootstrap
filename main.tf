@@ -181,7 +181,7 @@ locals {
   redirect_configuration_name    = "${var.aks_vnet_name}-rdrcfg"
 }
 
-Default sku Standard_v2 tier WAF_v2 $0.36 per hour
+# Default sku Standard_v2 tier WAF_v2 $0.36 per hour
 module "gateway" {
   source                       = "./modules/gateway"
   name                         = "aks-appgateway"

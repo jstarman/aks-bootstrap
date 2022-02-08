@@ -84,4 +84,3 @@ Links to help with subnet CIDR block setup. I found creating the VNet then manua
 - [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
 - [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator) calculate subnet blocks with N desired IPs + 2 reserved
 - [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
-
