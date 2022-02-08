@@ -79,6 +79,8 @@ Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for c
 
 ### Networking
 
+Links to help with subnet CIDR block setup. I found creating the VNet then manually adding subnets in the azure portal, recording the blocks, deleting, and then apply them via terraform to be the easiest.
+
 - [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
 - [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator) calculate subnet blocks with N desired IPs + 2 reserved
 - [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
