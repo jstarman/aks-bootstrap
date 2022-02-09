@@ -88,3 +88,7 @@ Links to help with subnet CIDR block setup. I found creating the VNet then manua
 ### Verification
 
 In the Azure Portal [connect to VM via Bastion](https://docs.microsoft.com/en-us/azure/bastion/bastion-connect-vm-ssh-linux)
+
+### VM Bootstrap scripting
+
+`./modules/virtual_machine/scripts/configure-jumpbox-vm.sh` contains a linux jumpbox bootstrap script for the linux VMs that runs on creation. Installs kubectl and helm for initial K8s setup.
