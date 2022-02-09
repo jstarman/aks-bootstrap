@@ -9,6 +9,11 @@ terraform {
   required_version = ">= 0.14.9"
 }
 
+# Bash bootstrapping file
+data "template_file" "linux-vm-cloud-init" {
+  template = file("./modules/virtual_machine/scripts/configure-jumpbox-vm.sh")
+}
+
 resource "azurerm_public_ip" "public_ip" {
   name                = "${var.name}PublicIp"
   location            = var.location
@@ -85,6 +90,7 @@ resource "azurerm_linux_virtual_machine" "virtual_machine" {
   computer_name                 = var.name
   admin_username                = var.vm_user
   tags                          = var.tags
+  custom_data                   = base64encode(data.template_file.linux-vm-cloud-init.rendered)
 
   os_disk {
     name                 = "${var.name}OsDisk"
@@ -120,36 +126,6 @@ resource "azurerm_linux_virtual_machine" "virtual_machine" {
   ]
 }
 
-# resource "azurerm_virtual_machine_extension" "custom_script" {
-#   name                    = "${var.name}CustomScript"
-#   virtual_machine_id      = azurerm_linux_virtual_machine.virtual_machine.id
-#   publisher               = "Microsoft.Azure.Extensions"
-#   type                    = "CustomScript"
-#   type_handler_version    = "2.0"
-
-#   settings = <<SETTINGS
-#     {
-#       "fileUris": ["https://${var.script_storage_account_name}.blob.core.windows.net/${var.container_name}/${var.script_name}"],
-#       "commandToExecute": "bash ${var.script_name}"
-#     }
-#   SETTINGS
-
-#   protected_settings = <<PROTECTED_SETTINGS
-#     {
-#       "storageAccountName": "${var.script_storage_account_name}",
-#       "storageAccountKey": "${var.script_storage_account_key}"
-#     }
-#   PROTECTED_SETTINGS
-
-#   lifecycle {
-#     ignore_changes = [
-#       tags,
-#       settings,
-#       protected_settings
-#     ]
-#   }
-# }
-
 resource "azurerm_virtual_machine_extension" "monitor_agent" {
   name                       = "${var.name}MonitoringAgent"
   virtual_machine_id         = azurerm_linux_virtual_machine.virtual_machine.id
@@ -175,7 +151,6 @@ resource "azurerm_virtual_machine_extension" "monitor_agent" {
       tags
     ]
   }
-  # depends_on = [azurerm_virtual_machine_extension.custom_script]
 }
 
 resource "azurerm_virtual_machine_extension" "dependency_agent" {

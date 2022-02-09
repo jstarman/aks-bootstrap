@@ -530,25 +530,3 @@ variable "vm_os_disk_storage_account_type" {
     error_message = "The storage account type of the OS disk is invalid."
   }
 }
-
-# variable "script_storage_account_name" {
-#   description = "(Required) Specifies the name of the storage account that contains the custom script."
-#   type        = string
-# }
-
-# variable "script_storage_account_key" {
-#   description = "(Required) Specifies the name of the storage account that contains the custom script."
-#   type        = string
-# }
-
-# variable "container_name" {
-#   description = "(Required) Specifies the name of the container that contains the custom script."
-#   type        = string
-#   default     = "scripts"
-# }
-
-# variable "script_name" {
-#   description = "(Required) Specifies the name of the custom script."
-#   type        = string
-#   default     = "configure-jumpbox-vm.sh"
-# }
