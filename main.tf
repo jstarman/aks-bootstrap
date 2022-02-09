@@ -159,8 +159,6 @@ module "egress_routetable" {
   }
 }
 
-# Runs clean to here
-
 resource "azurerm_user_assigned_identity" "appgw_identity" {
     resource_group_name = azurerm_resource_group.aks_platform_rg.name
     location            = var.location

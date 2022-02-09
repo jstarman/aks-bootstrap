@@ -30,4 +30,4 @@ override.tf.json
 
 .terraform.lock.hcl
 .env
-id_rsa.pub
+id_rsa*
