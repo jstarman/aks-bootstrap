@@ -61,6 +61,25 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for complete cleanup
 
+## Networking
+
+Links to help with subnet CIDR block setup. I found creating the VNet then manually adding subnets in the azure portal, recording the blocks, deleting, and then apply them via terraform to be the easiest.
+
+- [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
+- [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator) calculate subnet blocks with N desired IPs + 2 reserved
+- [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
+
+## Verification
+
+In the Azure Portal [connect to VM via Bastion](https://docs.microsoft.com/en-us/azure/bastion/bastion-connect-vm-ssh-linux) using the private key that was created in step 2 Fill variables above.
+
+## VM Bootstrap scripting
+
+`./modules/virtual_machine/scripts/configure-jumpbox-vm.sh` contains a linux jumpbox bootstrap script for the linux VMs that runs on creation. Installs tooling for initial K8s setup and use.
+
+- [VM bootstrap explainer](https://gmusumeci.medium.com/how-to-bootstrapping-azure-vms-with-terraform-c8fdaa457836)
+- [GitHub Source](https://github.com/guillermo-musumeci/terraform-azure-vm-bootstrapping)
+
 ## References
 
 - [Primary resource for Terraform Setup](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops)
@@ -76,19 +95,3 @@ Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for c
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
 - [AKS for microservices](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
 - [Terraform Examples](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples/kubernetes)
-
-### Networking
-
-Links to help with subnet CIDR block setup. I found creating the VNet then manually adding subnets in the azure portal, recording the blocks, deleting, and then apply them via terraform to be the easiest.
-
-- [Api Gateway WAF Config](https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure)
-- [Subnet Calculator](https://subnetcalculator.info/SubnetCalculator) calculate subnet blocks with N desired IPs + 2 reserved
-- [CIDR block ranges](https://www.ionos.com/digitalguide/server/know-how/cidr-classless-inter-domain-routing/)
-
-### Verification
-
-In the Azure Portal [connect to VM via Bastion](https://docs.microsoft.com/en-us/azure/bastion/bastion-connect-vm-ssh-linux)
-
-### VM Bootstrap scripting
-
-`./modules/virtual_machine/scripts/configure-jumpbox-vm.sh` contains a linux jumpbox bootstrap script for the linux VMs that runs on creation. Installs kubectl and helm for initial K8s setup.
