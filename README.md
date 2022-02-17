@@ -6,7 +6,7 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 |                                         | Complete
 |-----------------------------------------|-------
-| Egress restriction using Azure Firewall |
+| Egress restriction using Azure Firewall | x
 | Ingress Controller                      |
 | Azure Active Directory Pod Identity     |
 | Resource Limits                         |
@@ -54,8 +54,12 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 - [x] Tear down platform `./destroy.ps1`
   - destroy takes about 18m
   - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> Resource -> Diagnostic Settings -> Delete setting. Then Destroy and re-apply.
-- [ ] WAF and Application Gateway
 - [ ] Verify setup
+  - [x] Bastion -> VM connection
+  - [ ] AKS setup, helm, argocd
+  - [ ] Ingress via MS App Gateway
+        <https://ls-lrt.com/creating-a-aks-private-cluster-with-application-gateway-and-istio>
+  - [ ] TLS setup
 
 ## Cleanup
 
