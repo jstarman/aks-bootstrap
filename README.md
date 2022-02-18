@@ -61,6 +61,14 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
         <https://ls-lrt.com/creating-a-aks-private-cluster-with-application-gateway-and-istio>
   - [ ] TLS setup
 
+## DEV
+
+Since I don't want to pay or have the same security level as prod I've created a separate `main.tf` into `./dev`.
+
+- `az aks get-credentials --resource-group aks-platform-rg --name PlatformAks`
+- `kubectl get nodes`
+- remove addon_profile in aks module move content to top level
+
 ## Cleanup
 
 Run `terraform destroy` then `az group delete --name infra-state-rg --yes` for complete cleanup

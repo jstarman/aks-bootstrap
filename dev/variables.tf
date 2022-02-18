@@ -10,7 +10,7 @@ variable "cluster_admin_username" {
 }
 
 variable "platform_resource_group" {
-  default     = "aks-platform-rg"
+  default     = "dev-aks-platform-rg"
   type        = string
 }
 
@@ -304,7 +304,7 @@ variable "default_node_pool_os_disk_type" {
 variable "private_cluster_enabled" {
   description = "Should this Kubernetes Cluster have its API server only exposed on internal IP addresses? This provides a Private IP Address for the Kubernetes API on the Virtual Network where the Kubernetes Cluster is located. Defaults to false. Changing this forces a new resource to be created."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "network_docker_bridge_cidr" {

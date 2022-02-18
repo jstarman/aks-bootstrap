@@ -29,5 +29,5 @@ override.tf.json
 # example: *tfplan*
 
 .terraform.lock.hcl
-.env
-id_rsa*
+**.env
+**id_rsa*

@@ -10,14 +10,14 @@ variable "cluster_admin_username" {
 }
 
 variable "platform_resource_group" {
-  default     = "aks-platform-rg"
+  default     = "prod-aks-platform-rg"
   type        = string
 }
 
 variable "tags" {
   description = "(Optional) Specifies tags for all the resources"
   default     = {
-    env = "dev"
+    env = "prod"
   }
 }
 
