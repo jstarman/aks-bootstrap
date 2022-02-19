@@ -268,36 +268,6 @@ variable "aci_connector_linux" {
   }
 }
 
-variable "azure_policy" {
-  description = "Specifies the Azure Policy addon configuration."
-  type        = object({
-    enabled     = bool
-  })
-  default     = {
-    enabled     = false
-  }
-}
-
-variable "http_application_routing" {
-  description = "Specifies the HTTP Application Routing addon configuration."
-  type        = object({
-    enabled     = bool
-  })
-  default     = {
-    enabled     = false
-  }
-}
-
-variable "kube_dashboard" {
-  description = "Specifies the Kubernetes Dashboard addon configuration."
-  type        = object({
-    enabled     = bool
-  })
-  default     = {
-    enabled     = false
-  }
-}
-
 variable "admin_username" {
   description = "(Required) Specifies the Admin Username for the AKS cluster worker nodes. Changing this forces a new resource to be created."
   type        = string

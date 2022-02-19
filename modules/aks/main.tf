@@ -71,30 +71,8 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     service_cidr       = var.network_service_cidr
   }
 
-  addon_profile {
-    oms_agent {
-      enabled                    = var.oms_agent.enabled
-      log_analytics_workspace_id = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
-    }
-    ingress_application_gateway {
-      enabled                    = var.ingress_application_gateway.enabled
-      gateway_id                 = var.ingress_application_gateway.gateway_id
-      subnet_cidr                = var.ingress_application_gateway.subnet_cidr
-      subnet_id                  = var.ingress_application_gateway.subnet_id
-    }
-    aci_connector_linux {
-      enabled                    = var.aci_connector_linux.enabled
-      subnet_name                = var.aci_connector_linux.subnet_name
-    }
-    azure_policy {
-      enabled                    = var.azure_policy.enabled
-    }
-    http_application_routing {
-      enabled                    = var.http_application_routing.enabled
-    }
-    kube_dashboard {
-      enabled                    = var.kube_dashboard.enabled
-    }
+  oms_agent {
+    log_analytics_workspace_id = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
   }
 
   role_based_access_control {
