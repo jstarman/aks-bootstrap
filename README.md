@@ -4,9 +4,9 @@ An attempt at fast flow gitops style platform software development.
 
 Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline) and more complete example [here](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops) with a Terraform infrastructure install and Helm chart configuration.
 
-|                                         | Complete
+|                                         | Prod  | Dev
 |-----------------------------------------|-------
-| Egress restriction using Azure Firewall | x
+| Egress restriction using Azure Firewall | x |
 | Ingress Controller                      |
 | Azure Active Directory Pod Identity     |
 | Resource Limits                         |
@@ -23,9 +23,9 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 |                          | Complete
 |--------------------------|-------
 | Terraform                |
-| Cert-Manager             |
-| Istio Ingress Controller |
 | ArgoCD                   |
+| Istio Ingress Controller |
+| Cert-Manager             |
 | Sealed Secrets           |
 | Prometheus               |
 
@@ -53,7 +53,7 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
   - apply takes about 30m
 - [x] Tear down platform `./destroy.ps1`
   - destroy takes about 18m
-  - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> Resource -> Diagnostic Settings -> Delete setting. Then Destroy and re-apply.
+  - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> [Resource with Issue] -> Diagnostic Settings -> Delete setting. Then re-apply or Destroy and re-apply.
 - [ ] Verify setup
   - [x] Bastion -> VM connection
   - [ ] AKS setup, helm, argocd
@@ -63,11 +63,10 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 ## DEV
 
-Since I don't want to pay or have the same security level as prod I've created a separate `main.tf` into `./dev`.
+Dev is a less secure cheaper version of Prod. Applying `main.tf` will add you as cluster admin for full `kubectl` access.
 
-- `az aks get-credentials --resource-group aks-platform-rg --name PlatformAks`
+- `az aks get-credentials --resource-group dev-aks-platform-rg --name PlatformAks`
 - `kubectl get nodes`
-- remove addon_profile in aks module move content to top level
 
 ## Cleanup
 

@@ -16,9 +16,14 @@ terraform {
 # }
 
 resource "azuread_group" "aks_cluster_admin_group" {
-  display_name     = "AKSClusterAdmin"
-  mail_nickname    = "aksclusteradmingroup"
+  display_name     = "${var.tag}_${var.cluster_name}_Admin"
+  description      = "${var.tag}_${var.cluster_name} K8s administrators."
   security_enabled = true
+}
+
+resource "azuread_group_member" "add_user" {
+  group_object_id  = azuread_group.aks_cluster_admin_group.id
+  member_object_id = var.current_user_object_id
 }
 
 # resource "azuread_group_member" "add_user" {

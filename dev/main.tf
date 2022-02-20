@@ -31,6 +31,14 @@ resource "azurerm_resource_group" "aks_platform_rg" {
   tags     = var.tags
 }
 
+module "aks_admin_group" {
+  source                 = "../modules/ad_group"
+  cluster_admin_username = var.cluster_admin_username
+  cluster_name           = var.aks_cluster_name
+  tag                    = "dev"
+  current_user_object_id = data.azurerm_client_config.current.object_id
+}
+
 module "log_analytics_workspace" {
   source                           = "../modules/log_analytics"
   name                             = var.log_analytics_workspace_name
@@ -204,11 +212,6 @@ module "vnet_peering" {
 
 # # Application Gateway WAF routetable
 
-module "ad_group" {
-  source                 = "../modules/ad_group"
-  cluster_admin_username = var.cluster_admin_username
-}
-
 # default node pool VM skus
 # Standard_A2_v2 $55.48/month
 # Standard_DS2_v2 $83.22/month
@@ -247,7 +250,7 @@ module "aks_cluster" {
   log_analytics_workspace_id               = module.log_analytics_workspace.id
   role_based_access_control_enabled        = var.role_based_access_control_enabled
   tenant_id                                = data.azurerm_client_config.current.tenant_id
-  admin_group_object_ids                   = ["${module.ad_group.aks_cluster_admin_group_id}"]
+  admin_group_object_ids                   = ["${module.aks_admin_group.aks_cluster_admin_group_id}"]
   azure_rbac_enabled                       = var.azure_rbac_enabled
   admin_username                           = var.cluster_admin_username
   ssh_public_key                           = file("../${var.ssh_public_key_path}")
