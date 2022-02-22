@@ -4,9 +4,11 @@ An attempt at fast flow gitops style platform software development.
 
 Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline) and more complete example [here](https://github.com/Azure-Samples/private-aks-cluster-terraform-devops) with a Terraform infrastructure install and Helm chart configuration.
 
-|                                         | Prod  | Dev
-|-----------------------------------------|-------
-| Egress restriction using Azure Firewall | x |
+## Features
+
+|                                         | Prod | Dev
+|-----------------------------------------|------|-
+| Egress restriction using Azure Firewall | x    |
 | Ingress Controller                      |
 | Azure Active Directory Pod Identity     |
 | Resource Limits                         |
@@ -42,6 +44,12 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 ![API Gateway with WAF](./images/api-gateway.png)
 
+## Prerequisites
+
+- Terraform
+- kubectl
+- Helm
+
 ## Steps
 
 - [x] Create backend `./bootstrap.ps1`
@@ -56,7 +64,8 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
   - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue here](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> [Resource with Issue] -> Diagnostic Settings -> Delete setting. Then re-apply or Destroy and re-apply.
 - [ ] Verify setup
   - [x] Bastion -> VM connection
-  - [ ] AKS setup, helm, argocd
+  - [ ] AKS setup
+        - [ArgoCD with helm](https://www.arthurkoziel.com/setting-up-argocd-with-helm/)
   - [ ] Ingress via MS App Gateway
         <https://ls-lrt.com/creating-a-aks-private-cluster-with-application-gateway-and-istio>
   - [ ] TLS setup
@@ -67,6 +76,10 @@ Dev is a less secure cheaper version of Prod. Applying `main.tf` will add you as
 
 - `az aks get-credentials --resource-group dev-aks-platform-rg --name PlatformAks`
 - `kubectl get nodes`
+- `kubectl create namespace argocd`
+- <https://www.buchatech.com/2021/11/get-started-with-argo-cd-azure-kubernetes-service/>
+- <https://nemo83.dev/posts/argocd-istio-operator-bootstrap/>
+- <https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/>
 
 ## Cleanup
 
@@ -106,3 +119,4 @@ In the Azure Portal [connect to VM via Bastion](https://docs.microsoft.com/en-us
 - [Terraform AD provider docs](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs)
 - [AKS for microservices](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
 - [Terraform Examples](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples/kubernetes)
+- [ArgoCD readme](https://github.com/argoproj/argo-cd)
