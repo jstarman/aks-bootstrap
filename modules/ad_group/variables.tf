@@ -1,15 +1,16 @@
-variable "cluster_admin_username" {
-  description = "AKS Cluster Admin Service Principal"
+variable "group_name" {
+  description = "Name of AD group"
   type        = string
 }
 
-variable "cluster_name" {
-  description = "AKS cluster name"
+variable "environment" {
+  description = "Environment the AD group will be applied"
   type        = string
 }
 
-variable "tag" {
-  type = string
+variable "description"{
+  description = "AD group description"
+  type        = string
 }
 
 variable "current_user_object_id" {

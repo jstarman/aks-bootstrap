@@ -256,7 +256,10 @@ data "azurerm_client_config" "current" {}
 
 # module "ad_group" {
 #   source                 = "../modules/ad_group"
-#   cluster_admin_username = var.cluster_admin_username
+#   group_name             = "devops"
+#   description            = "Dev Ops"
+#   environment            = "prod"
+#   current_user_object_id = data.azurerm_client_config.current.object_id
 # }
 
 # # default node pool VM skus
@@ -296,7 +299,7 @@ data "azurerm_client_config" "current" {}
 #   log_analytics_workspace_id               = module.log_analytics_workspace.id
 #   role_based_access_control_enabled        = var.role_based_access_control_enabled
 #   tenant_id                                = data.azurerm_client_config.current.tenant_id
-#   admin_group_object_ids                   = ["${module.ad_group.aks_cluster_admin_group_id}"]
+#   admin_group_object_ids                   = ["${module.ad_group.devops_admin_group_id}"]
 #   azure_rbac_enabled                       = var.azure_rbac_enabled
 #   admin_username                           = var.cluster_admin_username
 #   ssh_public_key                           = file(var.ssh_public_key_path)

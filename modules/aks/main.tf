@@ -75,15 +75,13 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     log_analytics_workspace_id = coalesce(var.oms_agent.log_analytics_workspace_id, var.log_analytics_workspace_id)
   }
 
-  role_based_access_control {
-    enabled = var.role_based_access_control_enabled
-
-    azure_active_directory {
-      managed                = true
-      tenant_id              = var.tenant_id
-      admin_group_object_ids = var.admin_group_object_ids
-      azure_rbac_enabled     = var.azure_rbac_enabled
-    }
+  role_based_access_control_enabled = var.role_based_access_control_enabled
+  
+  azure_active_directory_role_based_access_control {
+    managed                = true
+    tenant_id              = var.tenant_id
+    admin_group_object_ids = var.admin_group_object_ids
+    azure_rbac_enabled     = var.azure_rbac_enabled
   }
 
   lifecycle {
