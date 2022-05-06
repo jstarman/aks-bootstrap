@@ -81,12 +81,6 @@ variable "default_node_pool_vm_size" {
   type        = string
 }
 
-variable "default_node_pool_availability_zones" {
-  description = "Specifies the availability zones of the default node pool"
-  default     = ["1", "2", "3"]
-  type        = list(string)
-}
-
 variable "network_docker_bridge_cidr" {
   description = "Specifies the Docker bridge CIDR"
   default     = "172.17.0.1/16"

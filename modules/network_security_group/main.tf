@@ -5,7 +5,7 @@ terraform {
     }
   }
 
-  required_version = ">= 0.14.9"
+  required_version = ">= 1.1.2"
 }
 
 resource "azurerm_network_security_group" "nsg" {

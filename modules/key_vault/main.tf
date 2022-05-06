@@ -5,7 +5,7 @@ terraform {
     }
   }
 
-  required_version = ">= 0.14.9"
+  required_version = ">= 1.1.2"
 }
 
 resource "azurerm_key_vault" "key_vault" {
@@ -21,7 +21,7 @@ resource "azurerm_key_vault" "key_vault" {
   enable_rbac_authorization       = var.enable_rbac_authorization
   purge_protection_enabled        = var.purge_protection_enabled
   soft_delete_retention_days      = var.soft_delete_retention_days
-  
+
   timeouts {
     delete = "60m"
   }

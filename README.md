@@ -57,12 +57,12 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
   - Determine aks supported version `az aks get-versions -l westus2`
   - Create public key for ssh
   - Determine aks VM size, disc type see default and addtional node vars
-- [x] Deploy platform `./apply.ps1`
+- [x] Deploy platform `./apply.ps1 <env>`
   - apply takes about 30m
   - If AKS cluster creation times out and errors check in portal and determine if it was create successfully. See [issue](https://github.com/Azure/AKS/issues/1972).
-    Yes? From environment (dev, pord) path `terraform import module.aks_cluster.azurerm_kubernetes_cluster.aks_cluster /subscriptions/[subscription id]/resourcegroups/[Resource Group Name]/providers/Microsoft.ContainerService/managedClusters/[Aks Cluster name]`
+    Yes? From environment (dev, prod) path `terraform import module.aks_cluster.azurerm_kubernetes_cluster.aks_cluster /subscriptions/[subscription id]/resourcegroups/[Resource Group Name]/providers/Microsoft.ContainerService/managedClusters/[Aks Cluster name]`
     No? destroy and try again
-- [x] Tear down platform `./destroy.ps1`
+- [x] Tear down platform `./destroy.ps1 <env>`
   - destroy takes about 18m
   - If the destroy does not run cleanly it will likely orphan diagnostic settings. The next apply will fail, see [issue](https://github.com/hashicorp/terraform-provider-azurerm/issues/6389). After running apply which will finish with errors indicating the resource(s) with problems. Go into the Portal Subsription -> Resources -> [Resource with Issue] -> Diagnostic Settings -> Delete setting. Then re-apply or Destroy and re-apply.
 - [ ] Verify setup
@@ -75,7 +75,7 @@ Generally following the [MS AKS Baseline](https://github.com/mspnp/aks-baseline)
 
 ## DEV
 
-Dev is a less secure cheaper version of Prod. Applying `main.tf` will add you as cluster admin for full `kubectl` access. Resources are created in the defalt namespace.
+Dev is a less secure cheaper version of Prod. Applying `main.tf` will add you as cluster admin for full `kubectl` access. Resources are created in the default namespace.
 
 - `az aks get-credentials --resource-group dev-aks-platform-rg --name PlatformAks`
 - `kubectl get nodes`

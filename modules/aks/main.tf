@@ -2,11 +2,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">=2.91.0"
+      version = ">=3.5.0"
     }
   }
 
-  required_version = ">= 0.14.9"
+  required_version = ">= 1.1.2"
 }
 
 resource "azurerm_user_assigned_identity" "aks_identity" {
@@ -37,7 +37,6 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     name                   = var.default_node_pool_name
     vm_size                = var.default_node_pool_vm_size
     vnet_subnet_id         = var.vnet_subnet_id
-    availability_zones     = var.default_node_pool_availability_zones
     node_labels            = var.default_node_pool_node_labels
     node_taints            = var.default_node_pool_node_taints
     enable_auto_scaling    = var.default_node_pool_enable_auto_scaling
@@ -60,7 +59,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
 
   identity {
     type = "UserAssigned"
-    user_assigned_identity_id = azurerm_user_assigned_identity.aks_identity.id
+    identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
   }
 
   network_profile {
@@ -76,7 +75,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   }
 
   role_based_access_control_enabled = var.role_based_access_control_enabled
-  
+
   azure_active_directory_role_based_access_control {
     managed                = true
     tenant_id              = var.tenant_id

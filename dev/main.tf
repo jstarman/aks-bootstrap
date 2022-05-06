@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.14.9"
+  required_version = ">= 1.1.2"
 
   backend "azurerm" {
     key = "tfstate"
@@ -8,11 +8,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">=2.91.0"
+      version = ">=3.5.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = ">=2.14.0"
+      version = ">=2.22.0"
     }
   }
 }
@@ -152,7 +152,6 @@ module "aks_cluster" {
   sku_tier                                 = var.sku_tier
   default_node_pool_name                   = var.default_node_pool_name
   default_node_pool_vm_size                = var.default_node_pool_vm_size
-  default_node_pool_availability_zones     = var.default_node_pool_availability_zones
   default_node_pool_node_labels            = var.default_node_pool_node_labels
   default_node_pool_node_taints            = var.default_node_pool_node_taints
   default_node_pool_enable_auto_scaling    = var.default_node_pool_enable_auto_scaling
@@ -195,7 +194,6 @@ module "node_pool" {
   mode                         = var.additional_node_pool_mode
   node_labels                  = var.additional_node_pool_node_labels
   node_taints                  = var.additional_node_pool_node_taints
-  availability_zones           = var.additional_node_pool_availability_zones
   vnet_subnet_id               = module.aks_network.subnet_ids[var.additional_node_pool_subnet_name]
   enable_auto_scaling          = var.additional_node_pool_enable_auto_scaling
   enable_host_encryption       = var.additional_node_pool_enable_host_encryption

@@ -5,7 +5,7 @@ terraform {
     }
   }
 
-  required_version = ">= 0.14.9"
+  required_version = ">= 1.1.2"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "settings" {
@@ -16,7 +16,7 @@ resource "azurerm_monitor_diagnostic_setting" "settings" {
   log_analytics_destination_type = var.log_analytics_destination_type
 
   eventhub_name                  = var.eventhub_name
-  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id 
+  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
 
   storage_account_id             = var.storage_account_id
 
